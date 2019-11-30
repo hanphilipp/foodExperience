@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="food experience" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div style="color: whitesmoke; background-color:#282E34;text-align:center;text-align: justify;">
+        <p style="margin: 0px 0px 0px 0px; padding: 2px 2px 2px 2px;">Food Experience</p>
+    </div>
+
+<div class="bgimg-1" >
+  <div class="caption">
+    <a href="#formularRef">
+        <span class="border smooth-scroll">Get started</span>
+    </a>
+  </div>
+</div>
+
+<div style="color: #777;background-color:white;text-align:center;padding:50px 80px;text-align: justify;">
+  <h3 style="text-align:center;">Food Experience</h3>
+  <p style="text-align:center;">
+      This website helps you to find a meal based on the ingredients you already got at home.
+      Because we all like to stay healthy, you also get to see the exact nutritions of the meal aswell as some nice activities to get rid of those nasty calories.
+      <br>
+      Fill out the formular to get started!
+  </p>
+</div>
+
+<div class="bgimg-2" id="formularRef">
+  <div class="caption">
+  <span class="border" style="margin: auto; display: table;background-color:transparent;font-size:25px;color: #f7f7f7;">FORMULAR</span>
+  </div>
+</div>
+
+<div style="position:relative;">
+  <div style="color:#ddd;background-color:#282E34;text-align:center;padding:50px 80px;text-align: justify;">
+    <div class="row">
+      <div class="col-sm-12 col-sm-offset-0 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+        <form>
+          <div class="form-group">
+            <label for="inputBodyweight">Bodyweight</label>
+            <input [(ngModel)]="weight" name="weight" type="number" class="form-control" id="inputBodyweight" aria-describedby="bodyweightHelp" placeholder="Enter Bodyweight in kg">
+            <small id="bodyweightHelp" class="form-text text-muted">Your Bodyweight will be used to calculate how long you will have to do certain activities.</small>
+          </div>
+          <div class="form-group">
+            <label for="inputIngredient1">Ingredients</label>
+            <input [(ngModel)]="ingredient1" name="ingr1" type="text" class="form-control" placeholder="Enter your first Ingredient">
+            <input [(ngModel)]="ingredient2"  name="ingr2"type="text" class="form-control" placeholder="Enter your second Ingredient">
+            <input [(ngModel)]="ingredient3" name="ingr3" type="text" class="form-control" placeholder="Enter your third Ingredient">
+            <input [(ngModel)]="ingredient4"  name="ingr4" type="text" class="form-control" placeholder="Enter your fourth Ingredient">
+            <input [(ngModel)]="ingredient5" name="ingr5" type="text" class="form-control" placeholder="Enter your fith Ingredient">
+          </div>
+          <div class="form.group manual-centered-button ">
+              <a href="#resultImages">
+                  <span (click)="saveInput()" class=" smaller-button smooth-scroll ">Confirm</span>
+              </a>
+          </div>
+        </form>
+      </div>
+    </div>    
+  </div>
+</div>
+
+<div class="bgimg-3">
+  <div class="caption">
+  <span class="border" style="margin: auto; display: table;background-color:transparent;font-size:25px;color: #f7f7f7;">RESULTS</span>
+  </div>
+</div>
+
+<div style="position:relative;" id="resultImages"> 
+  <div style="color:#ddd;background-color:#282E34;text-align:center;padding:50px 80px;text-align: justify;">
+    <div class="row">
+        <div class="results-image-panels col-sm-12 col-sm-offset-0 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+          <div *ngIf="(!formularCheck())" class="row" >
+            <p style="text-align: center;">Please use the Formular to get your personal results</p>
+          </div>
+          <div *ngIf="(!recipesExistingCheck())" class="row" >
+            <p style="text-align: center;">We can't find a recipe using all of your Ingredients</p>
+          </div>
+          <div *ngIf="!(recipesv2==null)" class="row" >
+            <div *ngFor="let recipe of recipesv2.recipes ; index as i">
+              <div *ngIf="indexCheck(i)">                
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                  <a href="#result-formular-ref" class="smooth-scroll" style="color:whitesmoke; ">
+                    <div>
+                      <figure>
+                        <img (click)="saveRecipe(recipe)" class="result-image" src="{{ recipe.image }}" alt="img not found">
+                        <figcaption>{{recipe.label}}</figcaption>
+                    </figure>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div id="result-formular-ref">
+        <div *ngIf="!(activatedRecipe.label==null)" class="row">
+            <div class="results-dynamic-forms col-sm-12 col-sm-offset-0 col-md-12 col-md-offset-0 col-lg-12 col-lg-offset-0">
+              <div class="row" class="manual-sliding-animation ">
+                <div class="col-lg-3">
+                    <div class="panel-heading">
+                        <label>{{activatedRecipe.label}}</label></div>
+                      <div class="panel-body">
+                          <img class="result-form-image" src="{{activatedRecipe.image}}" alt="image not found"><br>
+                          <div class="container-content">for {{activatedRecipe.yield}} people</div><br>
+                          <div class="container-content">{{activatedRecipe.calories}} calories p.p.</div><br>
+                          <div class="container-content"><a  class="container-content" href="{{activatedRecipe.url}}">To the recipe.</a><br>
+                      </div>
+                  </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel-heading">
+                      <label>Ingredients</label></div>
+                    <div class="panel-body">
+                      <div *ngFor="let ingredient of activatedRecipe.ingredients">
+                        <div class="container-content">{{ingredient.text}}</div><br>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel-heading">
+                      <label>Activities</label></div>
+                        <div class="panel-body">
+                            <div *ngFor="let activity of activatedRecipe.activities">
+                                <div class="container-content">{{activity.name}}: {{activity.time}} minutes</div><br>
+                              </div>
+                        </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="panel-heading">
+                      <label>Nutritions</label></div>
+                        <div class="panel-body">
+                            <div *ngFor="let nutrition of activatedRecipe.digest">
+                                <div class="container-content">{{nutrition.label}}: {{nutrition.total}}{{nutrition.unit}}</div><br>
+                              </div>
+                        </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+    
+  </div>
+</div>
+
+<div class="bgimg-1">
+  <div class="caption">
+    <div class="manual-centered">
+      <span class="border" style="margin: auto; display: table;">WE HOPE YOU HAD A GREAT FOOD EXPERIENCE!</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
